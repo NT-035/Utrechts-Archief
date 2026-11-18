@@ -1,0 +1,11 @@
+# Geen scripts uitvoeren in de uploadmap (TO §6)
+Options -ExecCGI -Indexes
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .php8 .phar .pl .py .cgi
+RemoveType .php .phtml .phar
+<FilesMatch "\.(php\d?|phtml|phar|pl|py|cgi|sh|html?|svg|js)$">
+    Require all denied
+</FilesMatch>
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+Header set X-Content-Type-Options "nosniff"

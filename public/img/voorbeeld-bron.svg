@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="lucht" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9dcc0"/><stop offset="1" stop-color="#d4c29d"/></linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8c8066"/><stop offset="1" stop-color="#5e5544"/></linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="#3b3428"/>
+  <rect x="30" y="30" width="740" height="540" fill="url(#lucht)"/>
+  <!-- gevels links en rechts -->
+  <path d="M30 380V170l40-40 40 40v-30h60v60l30-30 30 30v180Z" fill="#7a6a50"/>
+  <path d="M770 380V160l-45-45-45 45v-20h-55v70l-30-30-30 30v170Z" fill="#7a6a50"/>
+  <!-- Domtoren in de verte -->
+  <path d="M385 300V120h30v-30h-10l15-40 15 40h-10v30h30v180Z" fill="#9a8a6c"/>
+  <!-- brug -->
+  <path d="M30 380h740v40H30Z" fill="#5f513c"/>
+  <path d="M250 420a150 70 0 0 1 300 0Z" fill="#3e3628"/>
+  <!-- werf en water -->
+  <rect x="30" y="420" width="740" height="150" fill="url(#water)"/>
+  <path d="M60 470h120M260 500h160M520 460h140M120 530h200M480 540h180" stroke="#cbbd9d" stroke-width="4" stroke-linecap="round" opacity=".5"/>
+  <!-- tekst -->
+  <rect x="190" y="235" width="420" height="110" rx="14" fill="#f5eee0" opacity=".92"/>
+  <text x="400" y="282" font-family="Georgia, serif" font-size="34" text-anchor="middle" fill="#3b3428">Voorbeeldbron</text>
+  <text x="400" y="320" font-family="Segoe UI, Arial, sans-serif" font-size="20" text-anchor="middle" fill="#5e5544">Archiefmateriaal volgt van HUA</text>
+</svg>

@@ -1,0 +1,7 @@
+config/config.php
+uploads/*
+!uploads/.htaccess
+media/*.mp4
+media/*.webm
+!media/.gitkeep
+!uploads/.gitkeep

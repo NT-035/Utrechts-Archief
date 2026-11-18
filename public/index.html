@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>Ontmoet de Oudegracht</title>
+  <meta name="description" content="Vaar mee over de Oudegracht in 1929 – een interactieve tentoonstelling van Het Utrechts Archief.">
+  <meta name="theme-color" content="#14232b">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Pictogrammen -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-afspelen" viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.2-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" fill="currentColor"/></symbol>
+  <symbol id="i-pauze" viewBox="0 0 24 24"><rect x="6" y="5" width="4.2" height="14" rx="1.2" fill="currentColor"/><rect x="13.8" y="5" width="4.2" height="14" rx="1.2" fill="currentColor"/></symbol>
+  <symbol id="i-terug" viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8Z" fill="currentColor"/><text x="12" y="16.2" font-size="6.5" font-weight="700" text-anchor="middle" fill="currentColor" font-family="system-ui,sans-serif">10</text></symbol>
+  <symbol id="i-vooruit" viewBox="0 0 24 24"><path d="M12 5V2l5 4-5 4V7a6 6 0 1 0 6 6h2a8 8 0 1 1-8-8Z" fill="currentColor"/><text x="12" y="16.2" font-size="6.5" font-weight="700" text-anchor="middle" fill="currentColor" font-family="system-ui,sans-serif">10</text></symbol>
+  <symbol id="i-boot" viewBox="0 0 24 24"><path d="M3 14h18l-2.6 4.4a2 2 0 0 1-1.7 1H7.3a2 2 0 0 1-1.7-1L3 14Z" fill="currentColor"/><path d="M11 4v9H5.5L11 4Zm2 2.5 5 6.5h-5V6.5Z" fill="currentColor" opacity=".75"/></symbol>
+  <symbol id="i-sluiten" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"/></symbol>
+  <symbol id="i-huis" viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V20a1 1 0 0 1-1 1h-4.5v-5.5h-5V21H5a1 1 0 0 1-1-1v-8.5Z" fill="currentColor"/></symbol>
+  <symbol id="i-vraag" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M9.3 9.4a2.8 2.8 0 1 1 3.9 2.6c-.8.4-1.2 1-1.2 1.8v.6" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="12" cy="17.4" r="1.3" fill="currentColor"/></symbol>
+  <symbol id="i-scherm" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-volg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.4" fill="currentColor"/><circle cx="12" cy="12" r="7.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-foto" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="10" r="1.8" fill="currentColor"/><path d="m4 18 5-5 3.5 3.5L16 13l4 4" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round"/></symbol>
+  <symbol id="i-kaart" viewBox="0 0 24 24"><path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5L3 20V6.5Z M9 4v13.5M15 6.5V20" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round"/></symbol>
+  <symbol id="i-film" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 9.2v5.6l4.6-2.8L10 9.2Z" fill="currentColor"/></symbol>
+  <symbol id="i-document" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6V3Z M14 3v4h4M9 12h6M9 16h6" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round"/></symbol>
+  <symbol id="i-pijl-links" viewBox="0 0 24 24"><path d="M15 5 8 12l7 7" stroke="currentColor" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-pijl-rechts" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-lamp" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.7.5 1.1 1.3 1.1 2.2h5c0-.9.4-1.7 1.1-2.2A6 6 0 0 0 12 3Z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M12 11v6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="7.3" r="1.4" fill="currentColor"/></symbol>
+  <symbol id="i-hand" viewBox="0 0 24 24"><path d="M9 11V5a1.6 1.6 0 0 1 3.2 0v5.2M12.2 10V8.6a1.6 1.6 0 0 1 3.2 0v2M15.4 10.4a1.6 1.6 0 0 1 3.2 0v3.8c0 3.8-2.6 6.8-6.3 6.8-2.4 0-3.8-1-5.1-2.7l-2.6-3.6a1.6 1.6 0 0 1 2.5-2l1.9 2V11" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<div class="app" id="app">
+  <header class="kop">
+    <div class="kop__merk">
+      <button class="kop__logo" type="button" data-colofon aria-label="Over Het Utrechts Archief en deze applicatie">
+        <img src="img/logo-hua.svg" alt="Het Utrechts Archief" width="60" height="60">
+      </button>
+      <span class="kop__jaar">1929</span>
+      <h1 class="kop__titel">Ontmoet de Oudegracht</h1>
+    </div>
+    <p class="kop__route">Gaardbrug <span aria-hidden="true">→</span> Bezembrug</p>
+    <nav class="kop__knoppen" aria-label="Algemeen">
+      <button class="knop knop--licht" id="knop-help" type="button"><svg><use href="#i-vraag"/></svg><span>Hoe werkt het?</span></button>
+      <button class="knop knop--licht" type="button" data-colofon><svg><use href="#i-info"/></svg><span>Colofon</span></button>
+      <button class="knop knop--licht" id="knop-opnieuw" type="button"><svg><use href="#i-huis"/></svg><span>Opnieuw</span></button>
+      <button class="knop knop--licht knop--alleen-icoon" id="knop-scherm" type="button" aria-label="Volledig scherm"><svg><use href="#i-scherm"/></svg></button>
+    </nav>
+  </header>
+
+  <main class="vaartocht">
+    <!-- Linkerkant: de film met bediening -->
+    <section class="film" aria-label="Film van de vaartocht">
+      <div class="film__beeld" id="film-beeld">
+        <video id="video" playsinline muted preload="auto" disablepictureinpicture></video>
+        <div class="film__demo" id="film-demo" hidden>
+          <div class="film__demo-golven" aria-hidden="true"></div>
+          <svg class="film__demo-boot" aria-hidden="true"><use href="#i-boot"/></svg>
+          <p class="film__demo-titel">Hier komt de film uit 1929</p>
+          <p class="film__demo-tekst">De video is nog niet geplaatst. De kaart en de infopunten lopen al mee in demomodus.</p>
+        </div>
+        <button class="film__groot-afspelen" id="knop-groot-afspelen" type="button" aria-label="Afspelen">
+          <svg><use href="#i-afspelen"/></svg>
+        </button>
+        <div class="film__label" id="film-label" hidden></div>
+      </div>
+
+      <div class="bediening">
+        <div class="tijdlijn" id="tijdlijn" role="slider" aria-label="Plek in de film" tabindex="0" aria-valuemin="0">
+          <div class="tijdlijn__spoor">
+            <div class="tijdlijn__gevaren" id="tijdlijn-gevaren"></div>
+            <div class="tijdlijn__punten" id="tijdlijn-punten"></div>
+            <div class="tijdlijn__knop" id="tijdlijn-knop"><svg><use href="#i-boot"/></svg></div>
+          </div>
+        </div>
+        <div class="bediening__rij">
+          <button class="knop knop--rond" id="knop-terug" type="button" aria-label="10 seconden terug"><svg><use href="#i-terug"/></svg></button>
+          <button class="knop knop--rond knop--primair" id="knop-afspelen" type="button" aria-label="Afspelen">
+            <svg class="als-gepauzeerd"><use href="#i-afspelen"/></svg>
+            <svg class="als-spelend"><use href="#i-pauze"/></svg>
+          </button>
+          <button class="knop knop--rond" id="knop-vooruit" type="button" aria-label="10 seconden vooruit"><svg><use href="#i-vooruit"/></svg></button>
+
+          <div class="richting" role="group" aria-label="Vaarrichting">
+            <button class="richting__knop" id="knop-achteruit-varen" type="button" aria-pressed="false">
+              <svg class="richting__boot richting__boot--terug"><use href="#i-boot"/></svg><span>Terug varen</span>
+            </button>
+            <button class="richting__knop is-actief" id="knop-vooruit-varen" type="button" aria-pressed="true">
+              <span>Vooruit varen</span><svg class="richting__boot"><use href="#i-boot"/></svg>
+            </button>
+          </div>
+
+          <span class="tijd" id="tijd" aria-live="off">0:00 / 0:00</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rechterkant: de kaart met infopaneel -->
+    <section class="kaartvak" aria-label="Kaart van de Oudegracht">
+      <div class="kaart" id="kaart"></div>
+      <p class="kaart__offline-label">Schematische kaart <small>(geen internet)</small></p>
+      <p class="kaart__tip" id="kaart-tip"><svg><use href="#i-hand"/></svg> Tik op een nummer om erheen te varen</p>
+      <button class="knop knop--licht knop-volg" id="knop-volg" type="button" hidden><svg><use href="#i-volg"/></svg><span>Volg de boot</span></button>
+
+      <aside class="infopaneel" id="infopaneel" hidden aria-live="polite">
+        <button class="knop knop--rond knop--sluiten infopaneel__sluiten" id="infopaneel-sluiten" type="button" aria-label="Sluiten"><svg><use href="#i-sluiten"/></svg></button>
+        <div class="infopaneel__kop">
+          <span class="infopaneel__nummer" id="info-nummer">1</span>
+          <h2 class="infopaneel__titel" id="info-titel"></h2>
+        </div>
+        <div class="infopaneel__inhoud">
+          <p class="infopaneel__kort" id="info-kort"></p>
+          <p class="infopaneel__wist" id="info-wist"><svg><use href="#i-lamp"/></svg><span></span></p>
+          <div class="infopaneel__meer" id="info-meer" hidden>
+            <p id="info-uitleg"></p>
+          </div>
+          <button class="knop knop--tekst" id="info-meer-knop" type="button" aria-expanded="false">Meer weten</button>
+          <div class="infopaneel__bronnen" id="info-bronnen"></div>
+        </div>
+      </aside>
+    </section>
+  </main>
+</div>
+
+<!-- Startscherm -->
+<section class="startscherm" id="startscherm" aria-labelledby="start-titel">
+  <div class="startscherm__golven" aria-hidden="true"></div>
+  <button class="startscherm__logo" type="button" data-colofon aria-label="Over Het Utrechts Archief en deze applicatie">
+    <img src="img/logo-hua-groot.svg" alt="Het Utrechts Archief" width="121" height="120">
+  </button>
+  <div class="startscherm__inhoud">
+    <p class="startscherm__boventitel">900 jaar Oudegracht · Het Utrechts Archief</p>
+    <h1 class="startscherm__titel" id="start-titel">Ontmoet de Oudegracht</h1>
+    <p class="startscherm__intro">Stap in de boot en vaar mee door Utrecht in het jaar <strong>1929</strong>. Wat zie jij onderweg?</p>
+    <button class="knop knop--start" id="knop-start" type="button" disabled>
+      <svg><use href="#i-afspelen"/></svg><span>Start de vaartocht</span>
+    </button>
+    <ul class="startscherm__uitleg">
+      <li><svg><use href="#i-boot"/></svg><span>Het bootje op de kaart vaart mee met de film</span></li>
+      <li><svg><use href="#i-hand"/></svg><span>Tik op een nummer om naar die plek te varen</span></li>
+      <li><svg><use href="#i-foto"/></svg><span>Bekijk oude foto's en kaarten uit het archief</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- Hulpscherm -->
+<section class="overlay hulp" id="hulp" hidden aria-labelledby="hulp-titel" role="dialog" aria-modal="true">
+  <div class="hulp__kaart">
+    <button class="knop knop--rond knop--sluiten hulp__sluiten" data-sluit type="button" aria-label="Sluiten"><svg><use href="#i-sluiten"/></svg></button>
+    <h2 id="hulp-titel">Hoe werkt het?</h2>
+    <ul class="hulp__lijst">
+      <li><span class="hulp__icoon"><svg><use href="#i-afspelen"/></svg></span><span><strong>Afspelen of pauzeren</strong> met de grote ronde knop.</span></li>
+      <li><span class="hulp__icoon"><svg><use href="#i-boot"/></svg></span><span><strong>Vooruit of terug varen</strong> kies je met de knoppen naast de tijd.</span></li>
+      <li><span class="hulp__icoon hulp__icoon--nummer">7</span><span><strong>Tik op een nummer</strong> op de kaart. De boot vaart meteen naar die plek.</span></li>
+      <li><span class="hulp__icoon"><svg><use href="#i-hand"/></svg></span><span><strong>Sleep de boot</strong> op de balk onder de film om zelf te kiezen waar je bent.</span></li>
+      <li><span class="hulp__icoon"><svg><use href="#i-foto"/></svg></span><span><strong>Tik op een foto</strong> in het infovak om hem groot te zien.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- Colofon: informatie over Het Utrechts Archief, de applicatie en de makers -->
+<section class="overlay colofon" id="colofon" hidden role="dialog" aria-modal="true" aria-labelledby="colofon-titel">
+  <div class="hulp__kaart colofon__kaart">
+    <button class="knop knop--rond knop--sluiten hulp__sluiten" data-sluit type="button" aria-label="Sluiten"><svg><use href="#i-sluiten"/></svg></button>
+    <div class="colofon__kop">
+      <span class="colofon__logo"><img src="img/logo-hua-groot.svg" alt="" width="121" height="120"></span>
+      <h2 id="colofon-titel">Colofon</h2>
+    </div>
+    <div class="colofon__blokken">
+      <section>
+        <h3>Het Utrechts Archief</h3>
+        <p>Het Utrechts Archief beheert en bewaart documenten en bronnen over de geschiedenis van de stad en provincie Utrecht, en maakt die informatie toegankelijk voor iedereen.</p>
+        <p>Hamburgerstraat 28, Utrecht<br>hetutrechtsarchief.nl</p>
+      </section>
+      <section>
+        <h3>Deze applicatie</h3>
+        <p>Gemaakt voor de tentoonstelling <em>Ontmoet de Oudegracht</em> (2027), ter gelegenheid van 900 jaar Oudegracht. Je vaart mee met een film uit 1929, gemaakt vanaf een boot tussen de Gaardbrug en de Bezembrug.</p>
+        <p class="colofon__klein">Film en bronnen: collectie Het Utrechts Archief. Kaart: © OpenStreetMap-bijdragers.</p>
+      </section>
+      <section>
+        <h3>Makers</h3>
+        <p id="colofon-makers">Schaakmat – Natan</p>
+      </section>
+    </div>
+  </div>
+</section>
+
+<!-- Brontoning -->
+<section class="overlay bronscherm" id="bronscherm" hidden role="dialog" aria-modal="true" aria-labelledby="bron-titel">
+  <button class="knop knop--rond knop--sluiten bronscherm__sluiten" data-sluit type="button" aria-label="Sluiten"><svg><use href="#i-sluiten"/></svg></button>
+  <button class="knop knop--rond bronscherm__vorige" id="bron-vorige" type="button" aria-label="Vorige bron"><svg><use href="#i-pijl-links"/></svg></button>
+  <figure class="bronscherm__figuur">
+    <div class="bronscherm__media" id="bron-media"></div>
+    <figcaption class="bronscherm__onderschrift">
+      <p class="bronscherm__type" id="bron-type"></p>
+      <h2 class="bronscherm__titel" id="bron-titel"></h2>
+      <p class="bronscherm__bijschrift" id="bron-bijschrift"></p>
+      <p class="bronscherm__bron" id="bron-vermelding"></p>
+      <p class="bronscherm__teller" id="bron-teller"></p>
+    </figcaption>
+  </figure>
+  <button class="knop knop--rond bronscherm__volgende" id="bron-volgende" type="button" aria-label="Volgende bron"><svg><use href="#i-pijl-rechts"/></svg></button>
+</section>
+
+<!-- Foutmelding -->
+<section class="overlay foutscherm" id="foutscherm" hidden role="alertdialog" aria-labelledby="fout-titel">
+  <div class="hulp__kaart">
+    <h2 id="fout-titel">Oeps, de boot ligt even stil</h2>
+    <p id="fout-tekst">De gegevens konden niet worden geladen.</p>
+    <button class="knop knop--start" id="knop-fout-opnieuw" type="button"><span>Probeer opnieuw</span></button>
+  </div>
+</section>
+
+<script src="vendor/leaflet/leaflet.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
